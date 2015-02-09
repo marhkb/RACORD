@@ -36,6 +36,7 @@ public class Uots implements ITrajectoryCompareAlgorithm {
 	
 	private final ITupleToRawTrajectoryConverter tupleToRawTrajectoryConverter;
 	private final IMapMatcher mapMatcher;
+	private final IDistanceService distanceService;
 	
 	public Uots(final int k, final int utmZone, final Map<String, String> options) {
 		this.k = k;
@@ -46,6 +47,9 @@ public class Uots implements ITrajectoryCompareAlgorithm {
 		// Get the options
 		this.graph = GraphBuilderFactory.getInstance().load(options.get(MAP_FILE_KEY), utmZone);
 		this.mapMatcher = MapMatcherFactory.getInstance().create(options.get(MAP_MATCHER_KEY));
+		
+		this.distanceService = DistanceServiceFactory.getInstance().create(this.graph);
+
 	}
 
 	@Override

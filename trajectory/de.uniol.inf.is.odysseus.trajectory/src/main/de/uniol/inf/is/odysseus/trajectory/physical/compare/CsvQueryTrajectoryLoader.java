@@ -26,9 +26,11 @@ public class CsvQueryTrajectoryLoader implements IQueryTrajectoryLoader {
 		
 		Reader reader = null;
 		CSVParser parser = null;
+		List<CSVRecord> records = null;
 		try {
 			reader = new FileReader(param);
-			parser = new CSVParser(reader, CSVFormat.DEFAULT);
+			parser = CSVFormat.DEFAULT.parse(reader);
+			records = parser.getRecords();
 		} catch (IOException e) {
 			LOGGER.error(e.getMessage(), e);
 			throw new RuntimeException(e);
@@ -52,9 +54,8 @@ public class CsvQueryTrajectoryLoader implements IQueryTrajectoryLoader {
 		}
 		
 		final IPointCreator pointCreator = UtmPointCreatorFactory.getInstance().create(additional);
-		
 		final List<Point> points = new LinkedList<Point>();
-		for(final CSVRecord record : parser) {
+		for(final CSVRecord record : records) {
 			points.add(pointCreator.createPoint(
 					Double.parseDouble(record.get(0)), 
 					Double.parseDouble(record.get(1))));

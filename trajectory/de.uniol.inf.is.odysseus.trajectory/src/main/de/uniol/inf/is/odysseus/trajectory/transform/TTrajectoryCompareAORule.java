@@ -25,6 +25,7 @@ public class TTrajectoryCompareAORule extends AbstractTransformationRule<Traject
 				 trajectoryAO, 
 				 new TrajectoryComparePO<Tuple<ITimeInterval>>(
 						 trajectoryAO.getK(),
+						 trajectoryAO.getQueryTrajectory().getAbsolutePath(),
 						 trajectoryAO.getUtmZone(),
 						 trajectoryAO.getAlgorithm(),
 						 trajectoryAO.getOptionsMap()),

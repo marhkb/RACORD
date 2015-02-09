@@ -17,11 +17,6 @@ import edu.uci.ics.jung.graph.UndirectedSparseGraph;
 
 public class PointToPointMapMatcher implements IMapMatcher {
 
-	
-	public PointToPointMapMatcher() {
-		// TODO Auto-generated constructor stub
-	}
-
 	@Override
 	public UotsTrajectory map(RawTrajectory trajectory,
 			UndirectedSparseGraph<Point, LineSegment> graph) {

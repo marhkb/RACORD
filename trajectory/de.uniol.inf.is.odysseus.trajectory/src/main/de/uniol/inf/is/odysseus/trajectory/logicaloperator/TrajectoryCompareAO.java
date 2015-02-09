@@ -101,7 +101,7 @@ public class TrajectoryCompareAO extends UnaryLogicalOp {
 		this.utmZone = utmZone;
 	}
 	
-	@Parameter(type = FileParameter.class, name = "QUERYTRAJECTORY", optional=true)
+	@Parameter(type = FileParameter.class, name = "QUERYTRAJECTORY")
 	public void setQueryTrajectory(final File queryTrajectory) {
 		this.queryTrajectory = queryTrajectory;
 	}

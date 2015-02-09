@@ -21,7 +21,8 @@ public class MapMatcherFactory extends AbstractFactory<IMapMatcher, String> {
 	@Override
 	protected IMapMatcher createProduct(String convertedKey) {
 		switch(convertedKey) {
-		case "POINT-TO-POINT" : return new PointToArcPointMapMatcher();
+		case "POINT-TO-POINT" : return new PointToPointMapMatcher();
+		case "POINT-TO-ARCPOINT" : return new PointToArcPointMapMatcher();
 		}
 		return null;
 	}

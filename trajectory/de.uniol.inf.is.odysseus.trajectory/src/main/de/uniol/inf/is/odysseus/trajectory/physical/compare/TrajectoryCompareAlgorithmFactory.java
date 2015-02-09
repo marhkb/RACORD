@@ -13,14 +13,11 @@ public class TrajectoryCompareAlgorithmFactory {
 	public static TrajectoryCompareAlgorithmFactory getInstance() {
 		return INSTANCE;
 	}
-	
-	
-	private TrajectoryCompareAlgorithmFactory() { }
 
-	public ITrajectoryCompareAlgorithm create(final String name, int k, int utmZone, Map<String, String> options) {
+	public ITrajectoryCompareAlgorithm create(final String name, int k, String queryTrajectoryPath, int utmZone, Map<String, String> options) {
 		switch(name.toUpperCase()) {
 			case "OWD" : return new Owd(k);
-			case "UOTS" : return new Uots(k, utmZone, options);
+			case "UOTS" : return new Uots(k, QueryTrajectoryLoaderFactory.getInstance().load(queryTrajectoryPath, utmZone), utmZone, options);
 		}
 		return null;
 	}

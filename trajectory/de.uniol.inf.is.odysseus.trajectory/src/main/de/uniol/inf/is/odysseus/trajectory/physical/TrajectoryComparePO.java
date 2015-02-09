@@ -27,8 +27,8 @@ public class TrajectoryComparePO<T extends Tuple<ITimeInterval>> extends Abstrac
 	private final ITrajectoryCompareAlgorithm algorithm;
 	
 	
-	public TrajectoryComparePO(final int k, final int utmZone, final String algorithm, Map<String, String> options) {
-		this.algorithm = TrajectoryCompareAlgorithmFactory.getInstance().create(algorithm, k, utmZone, options);
+	public TrajectoryComparePO(final int k, final String queryTrajectoryPath, final int utmZone, final String algorithm, Map<String, String> options) {
+		this.algorithm = TrajectoryCompareAlgorithmFactory.getInstance().create(algorithm, k, queryTrajectoryPath, utmZone, options);
 	}
 
 	

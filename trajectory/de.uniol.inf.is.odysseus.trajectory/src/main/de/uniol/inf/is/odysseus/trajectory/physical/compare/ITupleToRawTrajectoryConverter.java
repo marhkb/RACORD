@@ -5,5 +5,5 @@ import de.uniol.inf.is.odysseus.core.metadata.ITimeInterval;
 
 public interface ITupleToRawTrajectoryConverter {
 
-	public RawTrajectory convert(Tuple<ITimeInterval> tuple);
+	public RawTrajectory convert(final Tuple<ITimeInterval> tuple, final int utmZone);
 }

@@ -30,6 +30,8 @@ public class Uots implements ITrajectoryCompareAlgorithm {
 
 	private final int k;
 	
+	private final int utmZone;
+	
 	private final UndirectedSparseGraph<Point, LineSegment> graph;
 	
 	private final ITupleToRawTrajectoryConverter tupleToRawTrajectoryConverter;
@@ -37,30 +39,20 @@ public class Uots implements ITrajectoryCompareAlgorithm {
 	
 	public Uots(final int k, final int utmZone, final Map<String, String> options) {
 		this.k = k;
+		this.utmZone = utmZone;
+		
+		this.tupleToRawTrajectoryConverter = TupleToRawTrajectoryConverterFactory.getInstance().create();
 		
 		// Get the options
 		this.graph = GraphBuilderFactory.getInstance().load(options.get(MAP_FILE_KEY), utmZone);
-		this.tupleToRawTrajectoryConverter = TupleToRawTrajectoryConverterFactory.getInstance().create();
 		this.mapMatcher = MapMatcherFactory.getInstance().create(options.get(MAP_MATCHER_KEY));
 	}
 
 	@Override
 	public Tuple<ITimeInterval> getKNearest(Tuple<ITimeInterval> incoming) {
 		
-		RawTrajectory t = this.tupleToRawTrajectoryConverter.convert(incoming);
-//		this.mapMatcher.map(t, this.graph);
-		
-//		private final SDFSchema outputSchema = new SDFSchema(
-//				TrajectoryCompareAO.class.getName(), 
-//				Tuple.class, 
-//				new SDFAttribute(null, "QTId", SDFDatatype.STRING, null),
-//				new SDFAttribute(null, "k", SDFDatatype.INTEGER, null),
-//				new SDFAttribute(null, "Total", SDFDatatype.INTEGER, null),
-//				new SDFAttribute(null, "Contains", SDFSpatialDatatype.INTEGER , null),
-//				new SDFAttribute(null, "tet", SDFTrajectoryDataType.OBJECT, new SDFSchema("", Tuple.class, 
-//						new SDFAttribute(null, "id", SDFDatatype.STRING, null),
-//						new SDFAttribute(null, "points", SDFDatatype.STRING, null)))
-//		);
+		final RawTrajectory t = this.tupleToRawTrajectoryConverter.convert(incoming, this.utmZone);
+		final UotsTrajectory uotsTrajectory = this.mapMatcher.map(t, this.graph);
 		
 		Tuple<ITimeInterval> result = new Tuple<ITimeInterval>(
 					new Object[] {

@@ -56,14 +56,16 @@ public class Uots implements ITrajectoryCompareAlgorithm {
 		final RawTrajectory t = this.tupleToRawTrajectoryConverter.convert(incoming, this.utmZone);
 		final UotsTrajectory uotsTrajectory = this.mapMatcher.map(t, this.graph);
 		
+		double distance = this.distanceService.getDistance(this.queryTrajectory, uotsTrajectory, Double.MAX_VALUE);
+		
 		Tuple<ITimeInterval> result = new Tuple<ITimeInterval>(
 					new Object[] {
-							"1",
+							uotsTrajectory.getRawTrajectory().getId(),
 							1,
 							1,
 							1,
 							new Object[] {
-									"Hallo", "werner"
+									"" + distance, "werner"
 							}
 					},
 					true

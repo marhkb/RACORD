@@ -7,6 +7,8 @@ import java.util.LinkedHashSet;
 import java.util.Set;
 
 import org.javatuples.Pair;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.vividsolutions.jts.geom.LineSegment;
 import com.vividsolutions.jts.geom.Point;
@@ -17,6 +19,9 @@ import edu.uci.ics.jung.graph.UndirectedSparseGraph;
 
 public class PointToPointMapMatcher implements IMapMatcher {
 
+	private final static Logger LOGGER = LoggerFactory.getLogger(PointToPointMapMatcher.class);
+	
+	
 	@Override
 	public UotsTrajectory map(RawTrajectory trajectory,
 			UndirectedSparseGraph<Point, LineSegment> graph) {
@@ -30,7 +35,7 @@ public class PointToPointMapMatcher implements IMapMatcher {
 		double minDistance = rawPoint.distance(minGraphPoint);
 		
 		while(graphVertexIt.hasNext()) {
-			Point nextGraphPoint = graphVertexIt.next();
+			final Point nextGraphPoint = graphVertexIt.next();
 			final double nextDistance = rawPoint.distance(nextGraphPoint);
 			if(nextDistance < minDistance) {
 				minGraphPoint = nextGraphPoint;
@@ -52,7 +57,8 @@ public class PointToPointMapMatcher implements IMapMatcher {
 	}
 
 	private Pair<Point, Double> search(Point lastRawPoint, Point rawPoint, Point lastGraphPoint, double currDistance, 
-			UndirectedSparseGraph<Point, LineSegment> graph) {	
+			UndirectedSparseGraph<Point, LineSegment> graph) {
+		
 		this.globalGraphPoint = null;
 		this.globalMinDistance = Double.MAX_VALUE;
 		
@@ -72,6 +78,7 @@ public class PointToPointMapMatcher implements IMapMatcher {
 	
 	private void search(Point lastRawPoint, Point rawPoint, Point currGraphPoint, double currDistance, double maxDistance, Set<Point> visitedGraphPoints,
 			UndirectedSparseGraph<Point, LineSegment> graph) {
+		
 		if(visitedGraphPoints.contains(currGraphPoint)) {
 			return;
 		}

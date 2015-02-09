@@ -23,7 +23,9 @@ public class DijkstraDistanceService implements IDistanceService {
 	
 	private final DijkstraDistance<Point, LineSegment> dijkstraDistance;
 	
-	private final Map<UotsTrajectory, Object> vehicleIds = new HashMap<>();
+	private final Map<UotsTrajectory, Foo> trajectoryMap = new HashMap<>();
+	
+	private double max;
 	
 	public DijkstraDistanceService(final UndirectedSparseGraph<Point, LineSegment> graph) {
 		this.dijkstraDistance = new DijkstraDistance<>(graph, new Transformer<LineSegment, Number>() {
@@ -37,10 +39,8 @@ public class DijkstraDistanceService implements IDistanceService {
 	
 	@Override
 	public double getDistance(UotsTrajectory queryTrajectory,
-			UotsTrajectory dataTrajectory, double upperBound) {
-		
-		long start = System.currentTimeMillis();
-		
+			UotsTrajectory dataTrajectory, double upperBound, int k) {
+				
 		double distance = 0;
 		for(final Point ec : queryTrajectory.getGraphPoints()) {
 			
@@ -53,16 +53,31 @@ public class DijkstraDistanceService implements IDistanceService {
 				}
 			}
 			distance += minDistance;
+			
+			
+			for(final UotsTrajectory old : this.trajectoryMap.keySet()) {
+				final Iterator<Point> oldIt = this.trajectoryMap.get(old).it;
+				while(oldIt.hasNext()) {
+					oldIt.next();
+				}
+			}
 		}
-		
-		LOGGER.info((System.currentTimeMillis() - start) + "");		
 		return distance;
 	}
 
 
 	@Override
 	public void removeTrajectory(UotsTrajectory queryTrajectory) {
-		// TODO Auto-generated method stub
+		this.trajectoryMap.remove(queryTrajectory);
+	}
+	
+	private final static class Foo {
+		private final Iterator<Point> it;
+		private double distance;
 		
+		public Foo(Iterator<Point> it, double distance) {
+			this.it = it;
+			this.distance = distance;
+		}
 	}
 }

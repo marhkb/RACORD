@@ -1,5 +1,7 @@
 package de.uniol.inf.is.odysseus.trajectory.physical;
 
+import java.util.Map;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -8,6 +10,7 @@ import de.uniol.inf.is.odysseus.core.metadata.ITimeInterval;
 import de.uniol.inf.is.odysseus.core.physicaloperator.IPunctuation;
 import de.uniol.inf.is.odysseus.core.server.physicaloperator.AbstractPipe;
 import de.uniol.inf.is.odysseus.trajectory.physical.compare.ITrajectoryCompareAlgorithm;
+import de.uniol.inf.is.odysseus.trajectory.physical.compare.TrajectoryCompareAlgorithmFactory;
 
 
 // 
@@ -24,8 +27,8 @@ public class TrajectoryComparePO<T extends Tuple<ITimeInterval>> extends Abstrac
 	private final ITrajectoryCompareAlgorithm algorithm;
 	
 	
-	public TrajectoryComparePO(ITrajectoryCompareAlgorithm algorithm) {
-		this.algorithm = algorithm;
+	public TrajectoryComparePO(final int k, final int utmZone, final String algorithm, Map<String, String> options) {
+		this.algorithm = TrajectoryCompareAlgorithmFactory.getInstance().create(algorithm, k, utmZone, options);
 	}
 
 	

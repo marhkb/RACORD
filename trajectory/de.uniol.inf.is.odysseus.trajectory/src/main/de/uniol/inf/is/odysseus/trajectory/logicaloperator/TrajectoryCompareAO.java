@@ -50,7 +50,7 @@ public class TrajectoryCompareAO extends UnaryLogicalOp {
 	private int utmZone;
 
 	
-	private final Map<String, String> optionsMap = new HashMap<>();
+	private Map<String, String> optionsMap = new HashMap<>();
 	
 	/**
 	 * Output schema
@@ -83,6 +83,7 @@ public class TrajectoryCompareAO extends UnaryLogicalOp {
 		this.algorithm = trajectoryCompareAO.algorithm;
 		this.queryTrajectory = trajectoryCompareAO.queryTrajectory;
 		this.utmZone = trajectoryCompareAO.utmZone;
+		this.optionsMap = trajectoryCompareAO.optionsMap;
 	}
 
 	@Parameter(type = IntegerParameter.class, name = "K")
@@ -100,7 +101,7 @@ public class TrajectoryCompareAO extends UnaryLogicalOp {
 		this.utmZone = utmZone;
 	}
 	
-	@Parameter(type = FileParameter.class, name = "QUERYTRAJECTORY")
+	@Parameter(type = FileParameter.class, name = "QUERYTRAJECTORY", optional=true)
 	public void setQueryTrajectory(final File queryTrajectory) {
 		this.queryTrajectory = queryTrajectory;
 	}

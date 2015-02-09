@@ -12,9 +12,6 @@ import de.uniol.inf.is.odysseus.transform.rule.AbstractTransformationRule;
 
 
 public class TTrajectoryCompareAORule extends AbstractTransformationRule<TrajectoryCompareAO> {
-
-	private final TrajectoryCompareAlgorithmFactory factory = 
-			new TrajectoryCompareAlgorithmFactory();
 	
 	 @Override
 	 public int getPriority() {
@@ -27,7 +24,10 @@ public class TTrajectoryCompareAORule extends AbstractTransformationRule<Traject
 		 this.defaultExecute(
 				 trajectoryAO, 
 				 new TrajectoryComparePO<Tuple<ITimeInterval>>(
-						 this.factory.create(trajectoryAO.getAlgorithm(), trajectoryAO.getK())), 
+						 trajectoryAO.getK(),
+						 trajectoryAO.getUtmZone(),
+						 trajectoryAO.getAlgorithm(),
+						 trajectoryAO.getOptionsMap()),
 				 config, 
 				 true,
 				 true);

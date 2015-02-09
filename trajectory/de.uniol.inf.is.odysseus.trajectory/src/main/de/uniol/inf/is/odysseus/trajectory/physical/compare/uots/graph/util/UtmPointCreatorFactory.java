@@ -10,7 +10,6 @@ public class UtmPointCreatorFactory extends AbstractFactory<UtmPointCreator, Int
 		return INSTANCE;
 	}
 	
-	
 	private UtmPointCreatorFactory() { }
 	
 	@Override

@@ -30,12 +30,12 @@ public class PointToPointMapMatcher implements IMapMatcher {
 		final Iterator<Point> rawIt = trajectory.getPoints().iterator();
 		Point rawPoint = rawIt.next();
 		
-		final Iterator<Point> graphIt = graph.getVertices().iterator();
-		Point minGraphPoint = graphIt.next();
+		final Iterator<Point> graphVertexIt = graph.getVertices().iterator();
+		Point minGraphPoint = graphVertexIt.next();
 		double minDistance = rawPoint.distance(minGraphPoint);
 		
-		while(graphIt.hasNext()) {
-			Point nextGraphPoint = graphIt.next();
+		while(graphVertexIt.hasNext()) {
+			Point nextGraphPoint = graphVertexIt.next();
 			final double nextDistance = rawPoint.distance(nextGraphPoint);
 			if(nextDistance < minDistance) {
 				minGraphPoint = nextGraphPoint;
@@ -71,7 +71,6 @@ public class PointToPointMapMatcher implements IMapMatcher {
 		
 		return new Pair<Point, Double>(this.globalGraphPoint, this.globalMinDistance);
 	}
-	
 	
 	private Point globalGraphPoint;
 	private double globalMinDistance;

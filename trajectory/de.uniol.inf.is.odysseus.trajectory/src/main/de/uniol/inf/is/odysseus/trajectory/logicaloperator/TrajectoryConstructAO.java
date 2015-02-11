@@ -100,11 +100,10 @@ public class TrajectoryConstructAO extends UnaryLogicalOp {
 	}
 	
 	
-//	@Override
-//	protected SDFSchema getOutputSchemaIntern(int pos) {
-//		return OUTPUT_SCHEMA;
-//	}
-	
+	@Override
+	protected SDFSchema getOutputSchemaIntern(int pos) {
+		return OUTPUT_SCHEMA;
+	}
 	
 	@Override
 	public AbstractLogicalOperator clone() {

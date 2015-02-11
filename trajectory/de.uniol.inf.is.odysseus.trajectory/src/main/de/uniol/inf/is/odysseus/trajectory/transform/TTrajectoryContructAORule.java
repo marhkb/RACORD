@@ -3,6 +3,9 @@ package de.uniol.inf.is.odysseus.trajectory.transform;
 import java.util.Arrays;
 import java.util.List;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import de.uniol.inf.is.odysseus.core.collection.Tuple;
 import de.uniol.inf.is.odysseus.core.metadata.ITimeInterval;
 import de.uniol.inf.is.odysseus.core.sdf.schema.DirectAttributeResolver;
@@ -37,13 +40,15 @@ import de.uniol.inf.is.odysseus.transform.rule.AbstractTransformationRule;
  */
 public class TTrajectoryContructAORule extends AbstractTransformationRule<TrajectoryConstructAO> {
 
+	private final static Logger LOGGER = LoggerFactory.getLogger(TTrajectoryContructAORule.class);
+	
+	
 	@Override
 	public void execute(TrajectoryConstructAO operator, TransformationConfiguration config) {
 		
 		final List<SDFAttribute> groupOrPartitionBy = Arrays.asList(operator.getTrajectoryId());
 		
 		final AggregateAO aggregateAO = new AggregateAO();
-		aggregateAO.setName("TrajectoryConstruct Aggregate");
 		aggregateAO.setGroupingAttributes(groupOrPartitionBy);
 		aggregateAO.setAggregationItems(Arrays.asList((AggregateItem)operator.getPositionMapping()));
 		
@@ -55,19 +60,18 @@ public class TTrajectoryContructAORule extends AbstractTransformationRule<Trajec
 			predicateWindowAO.setSameStarttime(true);
 			predicateWindowAO.setPartitionBy(groupOrPartitionBy);
 			
+			final IAttributeResolver attributeResolver = new DirectAttributeResolver(operator.getInputSchema());
+			final RelationalPredicateBuilder builder = new RelationalPredicateBuilder();
 			
-			IAttributeResolver r = new DirectAttributeResolver(aggregateAO.getInputSchema());
-			RelationalPredicateBuilder m = new RelationalPredicateBuilder();
+			final RelationalPredicate predStart = (RelationalPredicate)builder.createPredicate(attributeResolver, "State = 0");
+			predStart.init(operator.getInputSchema(), operator.getInputSchema());
+			predicateWindowAO.setStartCondition(predStart);
 			
-			final RelationalPredicate p = (RelationalPredicate)m.createPredicate(r, "State = 0");
-			p.init(aggregateAO.getInputSchema(), aggregateAO.getInputSchema());
-			predicateWindowAO.setStartCondition(p);
+			final RelationalPredicate predEnd = (RelationalPredicate)builder.createPredicate(attributeResolver, "State = -1");
+			predEnd.init(operator.getInputSchema(), operator.getInputSchema());
+			predicateWindowAO.setEndCondition(predEnd);
 			
-			final RelationalPredicate p1 = (RelationalPredicate)m.createPredicate(r, "State = -1");
-			p1.init(aggregateAO.getInputSchema(), aggregateAO.getInputSchema());
-			predicateWindowAO.setEndCondition(p1);
-			
-			RestructHelper.insertOperatorBefore(predicateWindowAO, aggregateAO);
+			RestructHelper.insertOperatorBefore(predicateWindowAO, operator);
 			this.insert(predicateWindowAO);
 		}
 	
